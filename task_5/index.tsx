@@ -23,8 +23,14 @@ const ComponentOne = () => {
 };
 
 const ComponentTwo = () => {
-    const { data } = useSWR('custom_key_2', () => fetchOnePost({ delayMS: 2000 }));
-    //...some logic
+    const { cache } = useSWRConfig(); 
+    const cachedData = cache.get('custom_key_1'); 
+
+    const { data } = useSWR(
+        'custom_key_2',
+        () => fetchOnePost({ delayMS: 2000 }),
+        { fallbackData: cachedData }
+    );
 
     return data ? (
         <div className={styles.card}>
